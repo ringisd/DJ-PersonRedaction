@@ -2,6 +2,7 @@
 import cv2
 import argparse
 import numpy as np
+import csv
 
 #Handle CMD line args
 
@@ -16,7 +17,7 @@ ap.add_argument('-cl', '--classes', required=True,
                 help = 'path to text file containing class names')
 args = ap.parse_args()
 
-filename = "media/Input/"+args.image
+filename = "media/Input/"+args.image+".png"
 image=cv2.imread(filename)
 
 
@@ -51,6 +52,15 @@ def get_output_layers(net):
 
     return output_layers
 
+#function to save the prediction 
+def savePred(left,top, right, bottom):
+    fileName = "media/Cordinates/"+args.image+'.csv'
+    f = open(fileName, 'a')
+    writer = csv.writer(f)
+    writer.writerow([left, top, right, bottom])
+    f.close()
+
+
 # function to draw bounding box on the detected object with class name
 def draw_bounding_box(img, class_id, confidence, x, y, x_plus_w, y_plus_h):
     if (class_id == 0):
@@ -60,6 +70,7 @@ def draw_bounding_box(img, class_id, confidence, x, y, x_plus_w, y_plus_h):
 
         cv2.rectangle(img, (x,y), (x_plus_w,y_plus_h), color, 2)
 
+        savePred(x, y, x_plus_w, y_plus_h)
         #cv2.putText(img, label, (x-10,y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
 
 # run inference through the network
@@ -114,7 +125,7 @@ cv2.imshow("object detection", image)
 cv2.waitKey()
     
  # save output image to disk
-outputfile = "media/Output/"+args.image
+outputfile = "media/Output/"+args.image+".jpg"
 cv2.imwrite(outputfile, image)
 
 # release resources

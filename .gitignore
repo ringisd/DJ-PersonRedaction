@@ -3,3 +3,5 @@ media/output/*
 models/
 
 media/
+
+*.avi

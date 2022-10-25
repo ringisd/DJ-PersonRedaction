@@ -42,6 +42,12 @@ blob = cv2.dnn.blobFromImage(image,scale, (416,416), (0,0,0), True, crop=False)
 #set input blob for the network
 net.setInput(blob)
 
+
+#Set file up
+fileName = "media/Cordinates/"+args.image+'.csv'
+f = open(fileName, 'w')
+f.close()
+
 # function to get the output layer names 
 # in the architecture
 def get_output_layers(net):
